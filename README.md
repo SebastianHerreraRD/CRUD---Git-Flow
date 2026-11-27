@@ -6,6 +6,7 @@ CRUD de consola en C# (.NET 8). Los datos se guardan en `tareas.json`.
 
     dotnet run
 
+## Ramas (Git Flow adaptado)
 
 - `main`: versión estable.
 - `qa`: pruebas.
