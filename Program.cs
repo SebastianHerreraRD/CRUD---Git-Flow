@@ -10,6 +10,7 @@ while (true)
     Console.WriteLine("1. Crear tarea");
     Console.WriteLine("2. Listar tareas");
     Console.WriteLine("3. Actualizar tarea");
+    Console.WriteLine("4. Eliminar tarea");
     Console.WriteLine("0. Salir");
     Console.Write("Opción: ");
 
@@ -26,6 +27,9 @@ while (true)
             break;
         case "3":
             UpdateTask();
+            break;
+        case "4":
+            DeleteTask();
             break;
         default:
             Console.WriteLine("Opción no válida.");
@@ -83,6 +87,15 @@ void UpdateTask()
 
     service.Update(id, title, description, completed);
     Console.WriteLine("Tarea actualizada.");
+}
+
+void DeleteTask()
+{
+    var id = ReadId();
+    Console.Write("¿Confirma la eliminación? (s/n): ");
+    if (Console.ReadLine()?.Trim().ToLower() != "s") return;
+
+    Console.WriteLine(service.Delete(id) ? "Tarea eliminada." : "No existe una tarea con ese ID.");
 }
 
 int ReadId()
