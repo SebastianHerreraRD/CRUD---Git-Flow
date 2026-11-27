@@ -9,6 +9,7 @@ while (true)
     Console.WriteLine("=== GESTOR DE TAREAS ===");
     Console.WriteLine("1. Crear tarea");
     Console.WriteLine("2. Listar tareas");
+    Console.WriteLine("3. Actualizar tarea");
     Console.WriteLine("0. Salir");
     Console.Write("Opción: ");
 
@@ -22,6 +23,9 @@ while (true)
             break;
         case "2":
             ListTasks();
+            break;
+        case "3":
+            UpdateTask();
             break;
         default:
             Console.WriteLine("Opción no válida.");
@@ -55,4 +59,34 @@ void ListTasks()
         Console.WriteLine($"[{task.Id}] {task.Title} - {status}");
         Console.WriteLine($"    {task.Description}");
     }
+}
+
+void UpdateTask()
+{
+    var id = ReadId();
+    var task = service.GetById(id);
+    if (task is null)
+    {
+        Console.WriteLine("No existe una tarea con ese ID.");
+        return;
+    }
+
+    Console.Write($"Nuevo título (Enter conserva '{task.Title}'): ");
+    var title = Console.ReadLine();
+    if (string.IsNullOrEmpty(title)) title = task.Title;
+    Console.Write("Nueva descripción (Enter conserva la actual): ");
+    var description = Console.ReadLine();
+    if (string.IsNullOrEmpty(description)) description = task.Description;
+    Console.Write("¿Completada? (s/n, Enter conserva): ");
+    var answer = Console.ReadLine()?.Trim().ToLower();
+    var completed = answer == "s" || (answer != "n" && task.IsCompleted);
+
+    service.Update(id, title, description, completed);
+    Console.WriteLine("Tarea actualizada.");
+}
+
+int ReadId()
+{
+    Console.Write("ID de la tarea: ");
+    return int.TryParse(Console.ReadLine(), out var id) ? id : 0;
 }
