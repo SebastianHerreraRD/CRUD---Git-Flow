@@ -44,6 +44,13 @@ void CreateTask()
     Console.Write("Descripción: ");
     var description = Console.ReadLine() ?? "";
 
+    var error = TaskValidator.Validate(title, description);
+    if (error is not null)
+    {
+        Console.WriteLine(error);
+        return;
+    }
+
     var task = service.Create(title, description);
     Console.WriteLine($"Tarea creada con ID {task.Id}.");
 }
@@ -84,6 +91,13 @@ void UpdateTask()
     Console.Write("¿Completada? (s/n, Enter conserva): ");
     var answer = Console.ReadLine()?.Trim().ToLower();
     var completed = answer == "s" || (answer != "n" && task.IsCompleted);
+
+    var error = TaskValidator.Validate(title, description);
+    if (error is not null)
+    {
+        Console.WriteLine(error);
+        return;
+    }
 
     service.Update(id, title, description, completed);
     Console.WriteLine("Tarea actualizada.");
